@@ -1,0 +1,556 @@
+# CHAPTER ONE: INTRODUCTION
+
+## 1.1 Preamble
+
+The operation of a university depends partly on the availability and condition of its physical facilities. Buildings, electrical installations, water systems and equipment support teaching, research and administrative activities. When a fault occurs, maintenance work must be coordinated through a process that records the problem, identifies its location, assigns responsibility and documents the action taken.
+
+Maintenance management therefore involves both technical work and the information required to organise that work. A repair may be completed successfully, but without an adequate record, supervisors may be unable to determine when it occurred, who performed it or whether follow-up action is needed. The U.S. Department of Energy (2010) identifies work-order tracking and retrievable maintenance history as important functions of computerised maintenance management systems.
+
+Three information processes are central to this project. Help desk management provides a structured channel for receiving and tracking requests. Project tracking organises larger activities into tasks with responsibilities and deadlines. Field reporting records the findings and actions associated with work carried out at a particular location. Connecting these processes can provide a clearer view of a maintenance activity from its initial report to its documented outcome.
+
+This project develops a web-based prototype intended for the Maintenance Department, University of Ibadan. The initial requirements are derived from selected literature and illustrative scenarios, rather than interviews or direct observation. The work consequently demonstrates a proposed software solution without claiming that the university's present procedures have been investigated or that operational improvements have been measured.
+
+## 1.2 Statement of Problems
+
+A maintenance information system needs to preserve the relationship between a reported fault, the person assigned to address it and the record of the work performed. When requests, assignments and technical reports are held separately, obtaining a complete history can require consultation of several records. A request register alone may not support multi-task projects, while a project tracker may not capture technical findings from field work.
+
+The problem addressed by this project is the need to demonstrate a common application that records requests, allocates work, tracks project tasks and retains structured field reports. Specifically, the proposed solution addresses request identification, responsibility assignment, progress visibility, technical documentation and summary reporting.
+
+These are literature-informed information-management needs, not verified findings about the University of Ibadan. The extent to which they match the department's current difficulties must be established through authorised consultation before deployment.
+
+## 1.3 Aim and Objectives
+
+The aim is to design, implement and evaluate a web-based prototype for the automation of help desk management, project tracking and field reporting for the Maintenance Department, University of Ibadan.
+
+The specific objectives are to:
+
+1. Identify and document literature-informed functional and non-functional requirements.
+2. Design the architecture, database and user interfaces for the proposed maintenance workflow.
+3. Implement ticket submission, assignment, commenting and status tracking.
+4. Implement project and task creation, assignment, deadlines and progress recording.
+5. Implement structured field reporting with optional links to maintenance tickets.
+6. Provide authentication, appropriate access controls and summary reporting.
+7. Evaluate selected functions through documented tests using synthetic records.
+
+## 1.4 Justification
+
+The project is justified as an applied software-development exercise that brings related maintenance records into one application. A shared interface can make it easier to locate request details, identify assigned personnel and review associated technical reports. The proposed ticket identifiers and update records support traceability, while task records provide a basis for monitoring planned activities.
+
+The use of widely available development tools makes the prototype reproducible within a student project environment. Its source code can be examined, revised and tested without depending on a proprietary application platform. However, this does not establish the total cost of institutional operation: hosting, support, training, security and maintenance would still require resources.
+
+The project contributes a working application together with its design documentation and test evidence. Reduced response times, improved productivity and greater satisfaction are possible outcomes for later investigation, not findings of this project.
+
+## 1.5 Scope of Study
+
+The scope covers a single-department prototype with three principal modules: help desk ticketing, project tracking and field reporting. Supporting facilities include user authentication, account creation, dashboard summaries and a ticket-report filter.
+
+The proposed roles are Administrator, Supervisor, Technician and Staff. They are design assumptions rather than confirmed university job classifications. Staff submit tickets; supervisors coordinate work; technicians update activities and submit reports; administrators maintain account access.
+
+The prototype does not include payroll, procurement, contractor billing, comprehensive inventory, sensor integration or a native mobile application. It does not provide offline operation or integration with university systems. Tickets and projects currently remain separate record types; field reports can link to tickets but not directly to project tasks.
+
+Evaluation is limited to selected automated checks and browser inspection using synthetic information. There has been no institutional deployment, participant usability study or operational performance comparison.
+
+## 1.6 Methodology
+
+Development proceeded in stages, with testing and revision after each stage. The reviewed literature provided the initial requirements, which were translated into application modules, database models and browser pages. Authentication and ticketing were developed alongside project tracking, field reporting and reporting facilities. Automated tests were then used to check selected operations and identify defects for correction.
+
+The application uses Python, Flask and SQLite, with Jinja2, HTML and CSS for server-rendered pages. pytest was used for automated checks, and Playwright with Chromium was used to capture genuine screenshots. Documentation distinguishes actual implementation from intended functionality and identifies requirements that still need validation or completion.
+
+# CHAPTER TWO: REVIEW OF RELEVANT LITERATURE
+
+## 2.1 Introduction and Review Approach
+
+This chapter presents a focused review of selected literature relevant to ticketing, maintenance information management and project monitoring. It is not a systematic review of all available research. Sources were selected for their direct relevance to the proposed functions and the availability of identifiable publication details.
+
+The review uses two academic studies and official maintenance-management guidance. This is a limited literature base and should be expanded if the lecturer requires broader coverage. Source claims are distinguished from project design choices; findings from other organisations are not treated as evidence about the University of Ibadan.
+
+## 2.2 Conceptual Review
+
+### 2.2.1 Maintenance management and CMMS
+
+The U.S. Department of Energy (2010) describes a computerised maintenance management system as software supporting the management and tracking of operations and maintenance activities. Capabilities can include work-order generation, prioritisation, maintenance history, scheduled activities and reporting. More extensive installations may also provide inventory control, labour-cost tracking and integration with other systems.
+
+The guide emphasises assessing needs rather than choosing software solely by feature count. It also identifies training and sustained commitment as implementation concerns. For this project, that guidance supports a limited initial scope and the requirement for future consultation with maintenance personnel.
+
+### 2.2.2 Help desk ticketing
+
+A ticket is the proposed system's electronic representation of an individual request. Its identifier, description, category, priority, status and assignment allow the request to remain recognisable during handling. Wonohardjo, Putra and Yossy (2022) demonstrate a web-based helpdesk approach in an organisational setting and identify maintainability and platform dependence as design concerns.
+
+The present prototype adopts structured request recording and a basic update history. Its ticketing module should not be confused with a fully validated service-management process: approval rules and permitted status transitions still require refinement.
+
+### 2.2.3 Project tracking
+
+Project tracking organises work into activities whose responsibilities and progress can be monitored. Hambali, Anisyah and Arianti (2024) describe a web-based project management application with task scheduling, notifications and expenditure monitoring. Their study illustrates the use of tasks and schedules to make ongoing work visible.
+
+The present project adopts task assignment, deadlines and progress recording, but excludes financial controls and automated notifications. Maintenance requirements cannot be inferred directly from software-team procedures; the selected concepts require adaptation and user validation.
+
+### 2.2.4 Field reporting
+
+In this project, a field report is a structured account of a site activity, containing the location, equipment, findings, action taken and date. These fields are design choices intended to support the retrievable maintenance history described by the U.S. Department of Energy (2010).
+
+A field report differs from a status update. Status indicates the stage of work, while the report explains what was found and done. A completed label alone does not document the technical basis for closing a request.
+
+## 2.3 Technical Framework
+
+The design combines three complementary ideas: work-order traceability, task-based monitoring and retrievable technical history. Work-order traceability informs the ticket and update records. Task-based monitoring informs project and task entities. Retrievable history informs the linkage between tickets and field reports.
+
+Role separation is an additional design requirement. The application should distinguish requesting, executing, supervising and administering activities. These responsibilities must be enforced through route and record-level checks rather than relying on hidden interface buttons or role labels alone.
+
+The progress indicator is deliberately simple. The prototype averages the percentages of a project's tasks and returns zero for a project with no tasks. This assumes equal task importance and is not a weighted measure of effort, expenditure or physical completion.
+
+## 2.4 Review of Related Studies and Guidance
+
+### 2.4.1 Wonohardjo, Putra and Yossy (2022)
+
+The authors developed a web-based helpdesk ticketing system for PT DENSO Indonesia. Their published abstract describes limitations of the previous IBM Lotus Notes-based arrangement, including restricted features, platform dependence and difficulty extending the source code. The replacement was developed using Extreme Programming and UML modelling.
+
+The authors report an 86% completion rate in a problem-reporting scenario involving 15 participants. This provides evidence from their evaluation context, not from the present project. Its main relevance is the practical demonstration of web-based request handling and the importance of evaluating user tasks. It does not establish the maintenance requirements of the University of Ibadan or the usability of this prototype.
+
+### 2.4.2 Hambali, Anisyah and Arianti (2024)
+
+This study describes a project management application for an ICT company. The authors used a waterfall approach and black-box testing. The described functions include task scheduling, project monitoring, notifications and comparisons between budget and expenditure.
+
+The study informs the project's task-oriented design. Assignments and progress values can make work visible to a coordinator, but the context differs from physical maintenance. The present prototype therefore adopts selected scheduling and monitoring ideas without claiming to reproduce the complete system or its outcomes.
+
+### 2.4.3 U.S. Department of Energy (2010)
+
+The Operations and Maintenance Best Practices Guide provides technical guidance rather than an experimental evaluation of this project. Its CMMS chapter discusses needs assessment, capabilities, implementation risks and selection considerations. It identifies historical records and work-order tracking as useful functions while warning that training and continuing commitment are important.
+
+This guidance prevents feature implementation from being equated with successful organisational adoption. The current software tests demonstrate selected behaviour; they do not demonstrate that staff have been trained, that the institution accepts the workflow or that records will be maintained consistently.
+
+## 2.5 Comparison of Reviewed Approaches
+
+Table 2.1 compares the selected sources. An unmentioned feature is treated as not established by the reviewed material, rather than assumed to be absent from the complete system.
+
+TABLE: Table 2.1: Comparison of reviewed approaches
+Source | Main focus | Design relevance | Boundary of application
+Wonohardjo et al. (2022) | Helpdesk ticketing | Structured requests and task-based evaluation | Company context; no validation of UI maintenance needs
+Hambali et al. (2024) | Project management | Tasks, schedules and monitoring | ICT-project context; adaptation required
+U.S. Department of Energy (2010) | CMMS guidance | Work orders, history and needs assessment | Guidance, not evaluation of this prototype
+Proposed prototype | Selected maintenance functions | Common interface for tickets, tasks and reports | Institutional and operational validation outstanding
+ENDTABLE
+
+The comparison supports combining selected concepts while maintaining a manageable scope. It does not demonstrate that existing products lack integration or that the proposed system is unique.
+
+## 2.6 Identified Practical Gap
+
+The project addresses an applied development need: producing a focused, inspectable prototype that connects selected maintenance functions in an intended university setting. Existing CMMS approaches already combine related activities, so integration alone is not claimed as a novel research discovery.
+
+The remaining gap is between the prototype and an institutionally validated workflow. Actual approval rules, reporting formats, staffing responsibilities, retention policies and service targets remain unknown. Future consultation should determine whether the prototype's assumptions are appropriate and which changes are necessary.
+
+## 2.7 Chapter Summary
+
+The review establishes a basis for request traceability, project-task monitoring and structured technical history. It also identifies the limits of transferring findings across contexts. A small, functioning prototype can demonstrate software feasibility without proving organisational benefit. Chapter Three translates the selected concepts into requirements and design.
+
+# CHAPTER THREE: METHODOLOGY
+
+## 3.1 Development Approach and Requirements Sources
+
+The project used iterative implementation and testing. Requirements were derived from the selected literature and illustrative scenarios, including fault submission, technician assignment, project-task updates and site-report submission. No interviews, observations or inspection of university records were undertaken.
+
+Iteration consisted of implementing functions, executing tests, examining failures and correcting code or test setup. It did not involve user-feedback sessions with maintenance personnel. The requirements are therefore provisional.
+
+The demonstration dataset contains invented accounts and activities. Its purpose is to make the workflow testable and visible without using confidential operational data. It is not a sample from which university maintenance performance can be estimated.
+
+## 3.2 Proposed Operational Model
+
+A user submits a request. A supervisor reviews it and assigns a technician. Progress and comments are recorded against the ticket. A field report can then describe the findings and action taken. Larger activities can be recorded as projects with tasks, although a direct ticket-to-project link is not currently part of the schema.
+
+Before adoption, the institution should confirm request categories, assignment authority, priority definitions, resolution and closure procedures, user visibility and reporting requirements. The official organisational designation of the maintenance unit should also be checked against the approved project title.
+
+## 3.3 Functional Requirements
+
+Table 3.1 records the target functions and the current implementation boundary. Status descriptions are not substitutes for detailed acceptance tests.
+
+TABLE: Table 3.1: Functional requirements and implementation boundary
+ID | Requirement | Current boundary
+FR-01 | Authenticate users | Implemented with password hashing and sessions
+FR-02 | Enforce role and record permissions | Partial; direct-record and summary access need strengthening
+FR-03 | Create identified maintenance tickets | Implemented; validation remains incomplete
+FR-04 | Assign tickets and record updates | Implemented; lifecycle controls need refinement
+FR-05 | Create projects and assigned tasks | Implemented
+FR-06 | Record task progress and deadlines | Implemented; date validation needs improvement
+FR-07 | Submit field reports linked to tickets | Implemented; link permissions require further checks
+FR-08 | Provide dashboard and ticket filters | Implemented; full numerical and filter testing pending
+FR-09 | Create user accounts | Implemented; role-value validation needs strengthening
+FR-10 | Edit/deactivate accounts and reset passwords | Not implemented
+ENDTABLE
+
+## 3.4 Non-Functional Requirements
+
+Usability requires understandable labels, consistent navigation and clear feedback. The interface aims to meet these requirements, but participant testing has not been performed. Responsive styling is present; comprehensive mobile and cross-browser evaluation remains outstanding.
+
+Security requires authentication, server-side permission checks, secure configuration, input validation and protection against forged state-changing requests. Password hashing and selected role checks exist. Complete record-level authorisation, cross-site request forgery protection and production security configuration remain unfinished.
+
+Data integrity requires valid relationships and consistent updates. Model declarations alone do not prove enforcement: foreign-key behaviour, invalid references and transaction failures require explicit checks. Reliability also requires tested backup and restoration procedures, which have not yet been evaluated.
+
+Performance targets should be defined against an expected workload. No concurrency or load evaluation has established the prototype's capacity. Maintainability is supported by separate modules and documented dependencies, but installation in a new environment must still be verified before submission or deployment.
+
+## 3.5 Architecture
+
+The application has three logical layers. The browser presents forms and tables. Flask routes process requests and apply application rules. SQLAlchemy models provide access to SQLite records. The layers are logical responsibilities; they are not three separately deployed servers.
+
+FIGURE: figures/verified_architecture.png | Figure 3.1: Logical architecture of the implemented prototype
+
+Requests travel from the browser to the Flask application. The application retrieves or changes data and renders a response using Jinja2 templates. Browser code uses application-relative URLs. The current prototype is server-rendered and does not require a separate JavaScript frontend framework.
+
+## 3.6 Actors and Use Cases
+
+The proposed actors are Staff, Technician, Supervisor and Administrator. The use-case model in Figure 3.2 represents intended responsibilities, not a statement that every permission is fully enforced in the present code.
+
+FIGURE: figures/verified_usecases.png | Figure 3.2: Proposed role-specific use cases; full authorisation remains a target requirement
+
+Staff submit and track their own tickets. Technicians update assigned work and submit reports. Supervisors assign work and organise projects. Administrators create accounts. All actors authenticate before accessing protected functions. For simplicity, the diagram displays the primary responsibility of each role rather than every shared navigation action.
+
+## 3.7 Data Flow and Process Design
+
+The principal information flow is a request from the reporter to ticket processing, followed by assignment and updates, with records retained in the database. Project processing receives project definitions and task updates. Field-report processing receives technical findings and actions. Summary processing reads stored records for display.
+
+The architecture diagram and database relationships describe the implemented components. A formal data-flow diagram should only be added if required and checked against actual routes; the earlier preliminary diagram is not relied upon in this consolidated report.
+
+The intended ticket sequence is Open, In Progress, Resolved and Closed. The prototype recognises these labels but allows broader transitions than the intended sequence. A separate closure-confirmation rule is not yet enforced. Task status is derived from progress: zero is Pending, intermediate values are In Progress, and 100 is Completed. Project status does not automatically become Completed when every task reaches 100%.
+
+## 3.8 Database Design
+
+The six entities and their principal fields are shown in Table 3.2. Repeated ticket history and project tasks are stored separately from their parent records, supporting one-to-many relationships.
+
+TABLE: Table 3.2: Database entities and principal fields
+Entity | Principal fields
+users | user_id; name; unique email; password_hash; role; created_at
+tickets | ticket_id; title; description; category; priority; status; reporter_id; optional technician_id; created_at; updated_at; resolved_at
+ticket_updates | update_id; ticket_id; author_id; note; old_status; new_status; created_at
+projects | project_id; name; description; start_date; end_date; status; created_by
+tasks | task_id; project_id; title; description; assignee_id; deadline; status; progress
+field_reports | report_id; technician_id; optional ticket_id; location; equipment; findings; action_taken; report_date; created_at; status
+ENDTABLE
+
+Figure 3.3 shows the logical relationships. Foreign-key columns may permit null values in the implementation; the diagram summarises conceptual associations rather than claiming stricter nullability than the schema enforces.
+
+FIGURE: figures/verified_relationships.png | Figure 3.3: Logical database relationships in the prototype
+
+A ticket can have multiple updates and multiple associated field reports. Each task belongs to one project. Users can be reporters, assignees, creators or report submitters. The field_reports.technician_id column currently identifies the submitting user, including a supervisor or administrator where that role submits a report. Renaming it submitted_by or restricting submission would clarify its semantics.
+
+The resolved_at field is populated by the closure operation. A refined design should store resolution and closure separately. Categories are currently configured in application code rather than managed through a database administration interface.
+
+## 3.9 Progress Calculation
+
+For a project with n tasks, summary progress is calculated as P = (p1 + p2 + ... + pn) / n, rounded to an integer. A project with no tasks returns zero. Each pi is a stored task percentage.
+
+This calculation provides a simple interface indicator, not a precise measure of physical completion. If tasks vary in duration or effort, weighted progress would be more appropriate. Such weights should be agreed with users rather than invented for the report.
+
+## 3.10 Interface and Implementation Tools
+
+The shared template contains navigation and message display. Individual templates provide login, dashboard, ticket, project, report and account pages. Forms use descriptive labels and status badges. Actual screenshots appear in Chapter Four rather than presenting wireframes as implemented screens.
+
+Python and Flask implement the application. Flask-Login manages sessions; Werkzeug hashes passwords; Flask-SQLAlchemy connects the models to SQLite; Jinja2 renders HTML. CSS provides layout and visual styling. pytest supports automated checks, while Playwright and Chromium support browser inspection and screenshot capture.
+
+## 3.11 Evaluation Method
+
+Automated tests use Flask's test client and an isolated in-memory SQLite database. They submit requests and inspect selected response or database properties. The test suite covers authentication, selected restrictions, ticket operations, task progress, report creation and limited reporting behaviour.
+
+Negative security tests, comprehensive filter tests, malformed-date checks, foreign-key enforcement checks and load tests remain additional work. Screenshot capture confirms the visible application state but is not a usability study. No representative university participants have completed formal evaluation tasks.
+
+## 3.12 Ethics and Methodological Limitations
+
+The prototype uses synthetic records. Real information should only be introduced with appropriate institutional permission and access controls. Future interviews and usability sessions must be accurately documented and conducted with appropriate consent.
+
+The absence of stakeholder validation limits the interpretation of requirements. The small demonstration dataset limits performance conclusions. Selected automated assertions do not establish complete security or correctness. These boundaries are retained in the results and conclusion rather than obscured by claims of universal success.
+
+# CHAPTER FOUR: SYSTEM IMPLEMENTATION, RESULTS AND DISCUSSION
+
+## 4.1 Development Environment and Application Structure
+
+The prototype was implemented and executed in a Linux workspace with Python 3.13, Flask and SQLite. Chromium was used for screenshots. No evidence is available of equivalent testing in Firefox, Edge or an institutional production environment.
+
+The application is organised into app.py, config.py, extensions.py, models.py, auth.py, helpdesk.py, projects.py, reports.py and dashboard.py. Templates and static CSS are stored in separate directories. The seed.py script provides demonstration records, and tests/test_app.py contains the automated suite.
+
+The app factory initialises configuration and extensions and registers route blueprints. SQLAlchemy creates the model tables. Account creation is separate from table creation: running seed.py supplies the demonstration accounts. The application is served for preview using a development server with the debugger disabled; this does not constitute production hosting.
+
+## 4.2 Database and Demonstration Data
+
+The six tables described in Chapter Three were implemented. Passwords are stored as hashes; related records use model foreign-key references. The demonstration database was populated with five accounts, six tickets, two projects, five tasks and two field reports.
+
+TABLE: Table 4.1: Demonstration dataset
+Record type | Number | Interpretation
+User accounts | 5 | Synthetic users across four role labels
+Tickets | 6 | Illustrative faults and service requests
+Projects | 2 | Illustrative planned activities
+Tasks | 5 | Sample assignments and progress values
+Field reports | 2 | Invented findings and actions
+ENDTABLE
+
+The dataset is not a sample of real university activities. Dates displayed in the images reflect the demonstration environment and must not be treated as dates of institutional fieldwork. Some sample statuses and report narratives are illustrative rather than a fully reconciled operational history.
+
+## 4.3 Implementation of Major Modules
+
+### 4.3.1 Authentication and accounts
+
+Users submit email and password credentials. A valid password creates a session and redirects to the dashboard; invalid credentials produce an error message. Protected routes redirect unauthenticated visitors to login. Administrators can create accounts, but editing, deactivation and password-reset facilities are not implemented.
+
+### 4.3.2 Help desk
+
+Tickets receive identifiers and an initial Open status. Supervisors and administrators can assign technicians. Assigning an open ticket changes it to In Progress and creates an assignment note. Comments and status changes are stored in the update table. Staff ticket lists and details restrict ownership, and technician lists show assigned tickets.
+
+Direct ticket-detail checks do not yet fully restrict technicians to assigned records. Dashboard and summary information also require role-appropriate scoping. These are known defects in the permission design, not completed controls.
+
+### 4.3.3 Project tracking
+
+Supervisors and administrators create projects and tasks. Tasks may be assigned to technicians, given deadlines and updated with progress values. The model clamps integer progress to the range 0–100 and derives task status. Further validation is needed for dates, assignment references and inconsistent project periods.
+
+### 4.3.4 Field reports
+
+The form collects location, equipment, findings, action taken, date and an optional ticket link. Required checks cover location, findings and action taken. Reports are stored with Submitted status. Date handling, related-ticket permissions and approval workflows require further work.
+
+### 4.3.5 Dashboard and reports
+
+The dashboard presents ticket and task totals, project and report counts and recent records. A server-rendered chart displays ticket statuses. The summary route supports status, priority and date filtering for tickets, with unfiltered project and field-report summaries. Its access restrictions require refinement.
+
+## 4.4 Application Screenshots
+
+Figures 4.1–4.8 are genuine screenshots captured from the running application using Playwright and Chromium. They display synthetic demonstration records. Each image is reproduced on a separate page with its caption below it, following the supplied departmental instruction.
+
+The login screen collects credentials. The dashboard summarises stored records rather than measuring service quality. The ticket list and submission form support request creation and retrieval. Ticket detail presents update controls and history. The project list displays dates, tasks and progress. The field-report form separates findings from actions. The summary image demonstrates an Open-status ticket filter.
+
+FIGURE: figures/fig4_1_login.png | Figure 4.1: Login page
+FIGURE: figures/fig4_2_dashboard.png | Figure 4.2: Dashboard with synthetic demonstration records
+FIGURE: figures/fig4_3_tickets.png | Figure 4.3: Ticket list
+FIGURE: figures/fig4_4_new_ticket.png | Figure 4.4: Ticket-submission form
+FIGURE: figures/fig4_5_ticket_detail.png | Figure 4.5: Ticket details and update controls
+FIGURE: figures/fig4_6_projects.png | Figure 4.6: Project list
+FIGURE: figures/fig4_7_field_report.png | Figure 4.7: Field-report submission form
+FIGURE: figures/fig4_8_reports.png | Figure 4.8: Summary page with an Open-status ticket filter
+
+## 4.5 Executed Tests and Results
+
+The test suite was rerun during preparation of this consolidated report. The execution reported 17 passed tests, 166 warnings and an elapsed time of approximately 8.24 seconds. The complete output is saved as test_evidence/pytest_verification.txt in the application source folder. The suite remains available for reproduction.
+
+Tables 4.2 and 4.3 describe the actual assertions. The suite is not a complete acceptance test and does not demonstrate every behaviour implied by a broad test name.
+
+TABLE: Table 4.2: Executed tests, authentication and ticketing
+ID | Behaviour checked | Result
+TC-01 | Valid login returned dashboard content | Passed
+TC-02 | Wrong password displayed an invalid-credentials message | Passed
+TC-03 | Staff access to users page redirected to dashboard | Passed
+TC-04 | Unauthenticated dashboard request redirected to login | Passed
+TC-05 | Stored password differed from plaintext; verification succeeded | Passed
+TC-06 | Ticket created with Open status and expected reporter | Passed
+TC-07 | Empty title did not create a ticket | Passed
+TC-08 | Assignment stored technician, In Progress status and update record | Passed
+TC-09 | Comment stored with expected author | Passed
+TC-10 | Closure stored Closed status and a timestamp | Passed
+ENDTABLE
+
+TABLE: Table 4.3: Executed tests, visibility and remaining functions
+ID | Behaviour checked | Result
+TC-11 | Another staff user's ticket absent from own-ticket list | Passed
+TC-12 | Project and related task stored | Passed
+TC-13 | Progress of 75% stored and reflected in project average | Passed
+TC-14 | Field report stored with expected location and Submitted status | Passed
+TC-15 | Dashboard rendered successfully with expected labels | Passed
+TC-16 | Open filter included open ticket and excluded closed ticket | Passed
+TC-17 | Administrator-created account retained role and valid password | Passed
+ENDTABLE
+
+The dashboard test does not independently verify numerical totals. The filter test covers status, not priority and date combinations. The comment and closure tests do not establish that only assigned technicians can act; in fact, they do not assign the test ticket before the technician action. Their success must not be interpreted as proof of correct record-level permissions.
+
+The warnings included deprecated date-time calls and legacy query usage. They did not fail the run, but dependencies and deprecated code should be reviewed. The complete terminal log from the verification run is included with the source code. Earlier development failures are discussed separately from this final verification run.
+
+## 4.6 Defects Found During Development
+
+The initial authentication failure arose because Flask-Login expected an identifier while the model used user_id. Defining get_id() to return that identifier as a string corrected the error.
+
+A second issue arose in the test helper: it attempted to sign in as another user without ending the existing session. The login route correctly redirected already-authenticated users, preventing the intended test-account switch. The helper was corrected to log out first. This was a test-setup problem, not evidence that staff had supervisor permissions.
+
+Ticket closure also initially failed because the code assigned the datetime.utcnow function to a date-time field rather than calling it. Adding parentheses supplied a datetime value, after which the test passed. The timestamp's naming and lifecycle semantics still need improvement, as discussed in Chapter Three.
+
+## 4.7 Results and Discussion
+
+The prototype demonstrates selected maintenance functions in a shared application. Database assertions provide evidence for record creation and updates; browser screenshots provide evidence that principal screens rendered. Together, they support feasibility within the limited test conditions.
+
+They do not establish real-world effectiveness. No maintenance personnel participated, no baseline was measured, and no operational records were analysed. Claims of reduced delays, productivity improvements, cost savings or satisfaction would therefore be unsupported.
+
+The modules share accounts and records but are not fully integrated across every activity. Tickets do not directly become projects, and field reports do not reference tasks. Reporting is basic, and the current progress calculation assumes equal task importance. These limits should guide the next development cycle rather than being hidden by a claim that all objectives are fully achieved.
+
+## 4.8 Outstanding Issues and Evaluation Boundaries
+
+Before operational use, the application needs record-level authorisation, scoped dashboards, comprehensive server validation, CSRF protection, secure secrets and session settings, password-reset and deactivation functions, defined status-transition rules and appropriate production hosting. The requirements file also needs controlled version management, and environment-variable instructions must be accurate: the current code reads process environment variables rather than automatically loading a .env file.
+
+No load test, cross-browser programme, backup-restoration exercise, participant usability study or institutional user-acceptance test has been completed. The software should remain a local demonstration using synthetic records until these issues are addressed.
+
+## 4.9 Chapter Summary
+
+Core ticketing, project-task and field-report functions were implemented. Seventeen selected automated tests passed after identified defects were corrected, and eight real screenshots were captured. The evidence supports a functioning prototype, not production readiness or institutional effectiveness. Chapter Five draws conclusions within that boundary.
+
+# CHAPTER FIVE: SUMMARY, CONCLUSION AND RECOMMENDATIONS
+
+## 5.1 Summary
+
+The project developed a web-based prototype for help desk management, project tracking and field reporting in an intended University of Ibadan maintenance context. Requirements were informed by selected literature and illustrative scenarios rather than direct fieldwork.
+
+Chapter One defined the problem, objectives and boundaries. Chapter Two reviewed ticketing, project management and CMMS guidance. Chapter Three translated selected concepts into a provisional architecture, schema and workflow. Chapter Four presented the implementation, actual screenshots, recorded test results and outstanding defects.
+
+The resulting application stores tickets, updates, projects, tasks and field reports in a shared database. Its screens and workflows provide a starting point for discussions with maintenance personnel and for further testing.
+
+## 5.2 Achievement of Objectives
+
+Requirements and design were documented at prototype level. Core ticket, task and field-report operations were implemented. Authentication and selected role checks work, but complete access control remains unfinished. Evaluation covered 17 automated tests and screenshot capture rather than full acceptance, usability or security testing.
+
+TABLE: Table 5.1: Assessment of objectives
+Objective | Assessment
+Requirements | Documented provisionally; institutional validation pending
+Architecture and database | Implemented design documented; final review required
+Help desk | Core functions work; transitions and permissions incomplete
+Project tracking | Core tasks and progress work; weighted monitoring absent
+Field reporting | Submission works; approval and task links absent
+Authentication and reporting | Partial completion of full target requirements
+Evaluation | Selected automated tests complete; broader studies not conducted
+ENDTABLE
+
+This assessment distinguishes a useful development result from a fully completed institutional deployment. The unresolved requirements are part of the project's limitations, not evidence of measured success.
+
+## 5.3 Contributions
+
+The project brings request recording, task monitoring and field reporting into one browser-based application. The source code, tests and screenshots allow the work to be inspected and reproduced rather than assessed from design descriptions alone.
+
+Its contribution is applied and educational. It does not claim to invent CMMS integration or establish that existing systems are incapable of supporting these functions. The prototype can support future discussions because stakeholders can inspect actual forms and workflows, but those discussions have not yet taken place.
+
+## 5.4 Conclusion
+
+A functioning prototype was produced for the selected scope. The implementation supports ticket submission and assignment, task progress and structured field reports. Seventeen recorded tests passed under the selected conditions.
+
+These results demonstrate technical feasibility at prototype scale. They do not prove conformity with university procedures, complete security, scalability or operational benefits. The project should therefore be presented as a working development prototype requiring further validation, not as a system already adopted by the University of Ibadan.
+
+The next step is to review the workflow with authorised maintenance personnel and correct the known software limitations.
+
+## 5.5 Recommendations
+
+First, consult authorised maintenance personnel to confirm responsibilities, request categories, approval rules, report formats, visibility and record-retention requirements. Revise the application to match confirmed needs.
+
+Second, prioritise authorisation and validation before adding optional features. Direct-record access, summary views, linked-record permissions and state-changing requests must be protected and negatively tested. Secure configuration and production hosting should replace demonstration settings before any real information is used.
+
+Third, complete administrative and workflow functions, including deactivation, password resetting, permitted status transitions and separate resolution and closure records. Report approval and project completion should follow agreed procedures.
+
+Fourth, expand the tests to verify numerical summaries, filter combinations, malformed dates, invalid references, concurrent updates and recovery. Preserve a complete test log for the final submission. Participant usability evaluation should be conducted separately from automated tests.
+
+Finally, consider an authorised, limited pilot only after critical defects are corrected. Define evaluation measures and a baseline before making claims of response-time or productivity improvement. Backup restoration, support responsibility and user training should be part of that plan.
+
+## 5.6 Limitations
+
+The project lacks direct requirements gathering, uses a small synthetic dataset and has limited automated coverage. Some permissions and controls are incomplete. Task percentages are unweighted, and module links are limited. No operational, user-acceptance or performance study has been conducted.
+
+These limitations constrain generalisation. A passing test is evidence of its assertion, not evidence that every related requirement has been satisfied.
+
+## 5.7 Future Work
+
+Future work may add direct links between tickets, projects, tasks and reports; notifications based on approved rules; preventive-maintenance schedules; an asset register; materials tracking; and offline-capable field reporting. Such extensions require their own requirements and tests.
+
+Weighted project progress could account for effort or duration once reliable estimates are available. Operational analytics could measure backlog age, response time and resolution time after definitions and timestamp quality have been established.
+
+A future user study should recruit appropriate participants with permission, define tasks, document consent and report actual findings. A controlled operational evaluation could then investigate benefits that the present prototype cannot establish.
+
+## 5.8 Final Summary
+
+The prototype is a foundation for further maintenance-system development. Its value lies in the functions that can be demonstrated and the test evidence available for review. Institutional validation, stronger controls and broader evaluation are necessary before operational adoption.
+
+# REFERENCES
+
+Hambali, Y. A., Anisyah, A., and Arianti, A. S. (2024). Analysis and design of web-based project management system. Journal of Engineering Science and Technology, 19(3), 996–1009. https://jestec.taylors.edu.my/Vol%2019%20Issue%203%20June%202024/19_3_18.pdf
+
+U.S. Department of Energy. (2010). Operations and maintenance best practices guide: A guide to achieving operational efficiency (Release 3.0, Chapter 4: Computerized maintenance management systems). Federal Energy Management Program. https://www1.eere.energy.gov/femp/pdfs/OM_4.pdf
+
+Wonohardjo, E. P., Putra, A. H., and Yossy, E. H. (2022). Design of web-based helpdesk ticketing system at PT DENSO Indonesia. PIKSEL: Penelitian Ilmu Komputer Sistem Embedded and Logic, 10(1), 1–18. https://doi.org/10.33558/piksel.v10i1.3183
+
+# APPENDIX A: INSTALLATION GUIDE
+
+## A.1 Requirements and Scope
+
+Use Python 3.10 or later and a modern browser. The demonstrated development environment used Python 3.13 on Linux. Compatibility with another computer should be verified. This guide is for a local synthetic-data demonstration, not a production deployment.
+
+The source folder is CSC476_Semester_Project/03_Software_Implementation/Source_Code/maintenance_portal. Copy that folder to the target computer. A public repository URL has not been created or verified.
+
+## A.2 Installation Steps
+
+1. Open a terminal inside maintenance_portal.
+2. Create an environment with: python -m venv .venv
+3. Activate it on Windows with: .venv\Scripts\activate
+4. Alternatively, on Linux/macOS use: source .venv/bin/activate
+5. Install dependencies with: python -m pip install -r requirements.txt
+6. Load demonstration records with: python seed.py
+7. Start a local preview with: python -m flask --app app run --host 127.0.0.1 --port 5000 --no-debugger --no-reload
+8. Open http://127.0.0.1:5000 in the same computer's browser.
+
+The seed script does not overwrite an already-populated user database. Do not delete a database containing important work to force reseeding. The local database file is maintenance.db unless configuration changes its location.
+
+## A.3 Configuration
+
+config.py reads SECRET_KEY and DATABASE_URL from the process environment. Copying .env.example to .env alone does not load those values in this implementation. Set environment variables through the operating system or deliberately implement and document a loader. Use a strong private key for any non-demonstration environment.
+
+The supplied demo accounts are intentionally not production credentials. They should be removed or replaced before real use; the current interface does not provide password resetting.
+
+TABLE: Table A.1: Local demonstration accounts
+Role | Email | Demonstration password
+Administrator | admin@maintenance.local | admin123
+Supervisor | supervisor@maintenance.local | supervisor123
+Technician | tech@maintenance.local | tech123
+Staff | staff@maintenance.local | staff123
+ENDTABLE
+
+## A.4 Running Tests
+
+Run python -m pytest tests/ -v from the application directory. To preserve a text log, redirect output to a file and inspect the exit status. Tests use an in-memory database, but the application's initial import may create its configured demonstration database. Re-run the suite after changes and archive the genuine output rather than copying old counts into a new report.
+
+# APPENDIX B: USER MANUAL
+
+## B.1 Sign In and Navigation
+
+Open the application URL supplied by the demonstrator. Enter an account email and password. Use the navigation links to open tickets, projects, field reports and summaries. Use Logout before switching accounts. Current access controls are incomplete, so the prototype must only contain synthetic data.
+
+## B.2 Submit and Track a Ticket
+
+As Staff, open Tickets and choose New Ticket. Enter a title, category, priority and description, then submit. Open the created ticket to inspect its status. Staff ticket lists show their own requests; this does not imply that every dashboard and summary is yet properly scoped.
+
+## B.3 Assign and Update Work
+
+As Supervisor, open a ticket, choose a technician and submit the assignment. As Technician, open an assigned ticket to add a comment or update status. Use the intended order Open, In Progress, Resolved and Closed; the software does not yet fully enforce this sequence or a separate closure approval.
+
+## B.4 Projects and Tasks
+
+As Supervisor, create a project with its description and dates. Open the project and add tasks with assignees and deadlines. Technicians can update relevant task percentages. The displayed project percentage is an average, not a weighted measure of completed effort. Completing tasks does not automatically complete the project's status.
+
+## B.5 Field Reports
+
+Choose New Report, record the location, equipment, findings, action taken and report date, and optionally select a ticket. Submit the form and inspect the listing. Reports are marked Submitted; no approval workflow is available. Do not enter actual confidential data.
+
+## B.6 Summary Reports and Accounts
+
+The Reports page filters tickets by status, priority or date range. Project and field-report summaries are not filtered by those controls. Administrators can create accounts, but account editing, deactivation and password-reset features are not provided in the current interface.
+
+# APPENDIX C: TEST EVIDENCE AND ACCEPTANCE CHECKLIST
+
+## C.1 Existing Evidence
+
+The source test file contains 17 automated tests. The verification run completed during report assembly reported 17 passed tests and 166 warnings; its full output is included in test_evidence/pytest_verification.txt. Chapter Four maps the assertions without overstating coverage. The screenshots establish rendering of eight pages, not a participant usability study.
+
+## C.2 Required Additional Checks
+
+Test technician access to other assignments, Staff access to summary information, report-to-ticket permissions, invalid role values, malformed dates, date ordering and invalid foreign-key references. Add CSRF protection and test its rejection behaviour. Verify exact dashboard totals and every filter independently and in combination.
+
+Also test installation in a clean environment, database backup restoration, mobile layouts, supported browsers and expected concurrency. Record input, expected result, actual result and evidence for every case. Unexecuted tests must remain marked Not yet completed.
+
+# APPENDIX D: SUBMISSION REVIEW CHECKLIST
+
+TABLE: Table D.1: Submission deliverables and review status
+Deliverable | Status | Required action
+Consolidated five-chapter report | Needs review | Confirm HOD, course title, date, formatting and claims
+Names and matriculation numbers | Needs review | Each member to verify spelling and identifier
+Team participation input | Needs review | Proposed responsibilities included; leader to verify completed work and evidence
+Separate proposal | Not yet completed | Prepare and obtain required approval
+Prototype source code | Needs review | Correct known controls and retest installation
+Application screenshots | Completed | Synthetic-data labels retained
+GitHub repository URL | Not yet completed | Publish only with user-authorised account access
+Literature ZIP and manifest | Not yet completed | Obtain permitted files and reconcile citations
+User-acceptance and usability evaluation | Not yet completed | Arrange authorised evaluation if required
+Final institutional submission | Not yet completed | User to submit through approved procedure
+ENDTABLE
+
+This checklist reports the actual package status. The document is a consolidated report draft, not proof of university submission or acceptance. Requirements not supplied by the lecturer must be confirmed rather than invented.

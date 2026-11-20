@@ -1,0 +1,72 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.16, pytest-9.0.3, pluggy-1.6.0 -- /usr/local/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/user/CSC476_Semester_Project/03_Software_Implementation/Source_Code/maintenance_portal
+plugins: anyio-4.15.1, platformdirs-4.12.3
+collecting ... collected 17 items
+
+tests/test_app.py::test_login_valid PASSED                               [  5%]
+tests/test_app.py::test_login_invalid PASSED                             [ 11%]
+tests/test_app.py::test_role_access_denied PASSED                        [ 17%]
+tests/test_app.py::test_unauthenticated_redirect PASSED                  [ 23%]
+tests/test_app.py::test_password_stored_hashed PASSED                    [ 29%]
+tests/test_app.py::test_create_ticket PASSED                             [ 35%]
+tests/test_app.py::test_ticket_validation PASSED                         [ 41%]
+tests/test_app.py::test_assign_ticket PASSED                             [ 47%]
+tests/test_app.py::test_add_comment PASSED                               [ 52%]
+tests/test_app.py::test_close_ticket PASSED                              [ 58%]
+tests/test_app.py::test_staff_views_own_tickets PASSED                   [ 64%]
+tests/test_app.py::test_create_project_and_tasks PASSED                  [ 70%]
+tests/test_app.py::test_update_task_progress PASSED                      [ 76%]
+tests/test_app.py::test_field_report PASSED                              [ 82%]
+tests/test_app.py::test_dashboard_counts PASSED                          [ 88%]
+tests/test_app.py::test_summary_filter PASSED                            [ 94%]
+tests/test_app.py::test_admin_creates_user PASSED                        [100%]
+
+=============================== warnings summary ===============================
+tests/test_app.py: 94 warnings
+  /usr/local/lib/python3.13/site-packages/sqlalchemy/sql/schema.py:4296: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore[call-arg, no-any-return, no-untyped-call]  # noqa: E501
+
+tests/test_app.py: 54 warnings
+  /home/user/CSC476_Semester_Project/03_Software_Implementation/Source_Code/maintenance_portal/auth.py:19: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    return User.query.get(int(user_id))
+
+tests/test_app.py: 10 warnings
+  /usr/local/lib/python3.13/site-packages/flask_sqlalchemy/query.py:30: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    rv = self.get(ident)
+
+tests/test_app.py::test_assign_ticket
+  /home/user/CSC476_Semester_Project/03_Software_Implementation/Source_Code/maintenance_portal/helpdesk.py:55: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    technician = User.query.get(tech_id) if tech_id else None
+
+tests/test_app.py::test_assign_ticket
+  /home/user/CSC476_Semester_Project/03_Software_Implementation/Source_Code/maintenance_portal/tests/test_app.py:123: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    ticket = Ticket.query.get(tid)
+
+tests/test_app.py::test_close_ticket
+  /home/user/CSC476_Semester_Project/03_Software_Implementation/Source_Code/maintenance_portal/models.py:48: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.updated_at = datetime.utcnow()
+
+tests/test_app.py::test_close_ticket
+  /home/user/CSC476_Semester_Project/03_Software_Implementation/Source_Code/maintenance_portal/models.py:50: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.resolved_at = datetime.utcnow()
+
+tests/test_app.py::test_close_ticket
+  /home/user/CSC476_Semester_Project/03_Software_Implementation/Source_Code/maintenance_portal/tests/test_app.py:157: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    ticket = Ticket.query.get(tid)
+
+tests/test_app.py::test_create_project_and_tasks
+  /home/user/CSC476_Semester_Project/03_Software_Implementation/Source_Code/maintenance_portal/tests/test_app.py:193: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    project = Project.query.get(pid)
+
+tests/test_app.py::test_update_task_progress
+  /home/user/CSC476_Semester_Project/03_Software_Implementation/Source_Code/maintenance_portal/tests/test_app.py:211: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    task = Task.query.get(task_id)
+
+tests/test_app.py::test_update_task_progress
+  /home/user/CSC476_Semester_Project/03_Software_Implementation/Source_Code/maintenance_portal/tests/test_app.py:214: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    assert Project.query.get(pid).progress() == 75
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 17 passed, 166 warnings in 8.24s =======================
