@@ -1,0 +1,10 @@
+Pagination verification
+
+Total physical PDF pages: 70
+Front matter including unnumbered title: 15 physical pages
+Main text, references and appendices: 55 numbered pages
+No unintended blank pages detected.
+Contents, figures and tables lists populated with dotted leaders.
+Chapter start pages: {'CHAPTER ONE': 1, 'CHAPTER TWO': 5, 'CHAPTER THREE': 11, 'CHAPTER FOUR': 23, 'CHAPTER FIVE': 40}
+All four student identifiers and supervisor name verified.
+Word pagination may change after editing or with different fonts; PDF preserves this checked layout.

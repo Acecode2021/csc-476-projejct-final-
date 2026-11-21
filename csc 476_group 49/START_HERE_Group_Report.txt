@@ -1,0 +1,37 @@
+CSC 476 — GROUP PROJECT REVIEW PACKAGE
+
+Main document: CSC476_Final_Project_Report.docx
+Fixed-layout copy: CSC476_Final_Project_Report.pdf — 70 verified physical pages, including front matter, references and appendices.
+Contents, figure and table lists are populated with page numbers and dotted leaders.
+This supersedes the earlier incomplete Word draft for report review.
+
+Confirmed supervisor and course lecturer: Professor Oladejo. HOD remains to be confirmed.
+
+Group members:
+- Ogundele, Tobiloba James — E054654 (team leader)
+- Aderinto, Kunle Abraham — E055233
+- Olusola, Ayomide Emmanuel — E055067
+- Alonge, Ayobami Blessing — E054861
+
+Includes:
+- Consolidated five-chapter report with all four students and team leader.
+- Plain-text extraction for easy copying.
+- Prototype source code (no demonstration database included; run seed.py).
+- Actual application screenshots and revised explanatory diagrams.
+- Full automated test output: 17 passed, 166 warnings.
+
+Before submission:
+1. Verify names and matriculation numbers.
+2. Fill in HOD, exact course title and submission date.
+3. Team leader alone must complete and approve actual participation entries.
+4. Review the group dedication and acknowledgement wording.
+5. Confirm certification wording and obtain genuine signatures only after approval.
+6. After editing in Word, Ctrl+A then F9 to refresh page references. The supplied PDF has already been paginated.
+7. Confirm typography/margins with the lecturer: current settings are editorial choices.
+8. Correct known software permissions/validation and expand testing.
+9. Complete a separate proposal, literature ZIP/manifest and genuine repository URL.
+10. Verify source requirements and expand the literature review if requested.
+
+This package is a professional REVIEW DRAFT, not a completed institutional submission.
+No interviews or participant studies have been conducted. Screenshots use synthetic data.
+Do not submit the older report as it contains superseded assumptions and claims.
